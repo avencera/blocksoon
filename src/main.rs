@@ -39,7 +39,7 @@ fn main() {
                 .arg("/Applications/SelfControl.app/Contents/MacOS/org.eyebeam.SelfControl")
                 .arg(uid.to_string())
                 .arg("--install")
-                .status();
+                .output();
 
             break;
         }
