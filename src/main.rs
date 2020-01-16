@@ -3,18 +3,10 @@ use std::thread;
 use std::time::Duration;
 
 fn main() {
-    let (send_timer, recv_timer) = channel();
     let (send, recv) = channel();
 
     let coundown_duration = 10;
     let mut time = coundown_duration.clone();
-
-    // timer
-    thread::spawn(move || loop {
-        thread::sleep(Duration::from_secs(1));
-        time = time - 1;
-        send_timer.send(time).unwrap();
-    });
 
     // final
     thread::spawn(move || {
@@ -23,9 +15,7 @@ fn main() {
     });
 
     loop {
-        let _ = recv_timer
-            .try_recv()
-            .map(|reply| println!("Tick: {}", reply));
+        println!("Tick: {}", time);
 
         let timer_ended = recv.try_recv().map(|_reply| println!("Done"));
 
@@ -33,6 +23,7 @@ fn main() {
             break;
         }
 
-        thread::sleep(Duration::from_millis(100));
+        thread::sleep(Duration::from_secs(1));
+        time = time - 1;
     }
 }
