@@ -20,3 +20,7 @@ This solves that problem by automatically starting the SelfControl app after my 
 
 * Start SelfControl in 1 hour:
   * `blocksoon -h 1`
+
+## To Do
+- [ ] Add `clap` to parse duration argument `-m` for minutes, `-s` for seconds, `-h` for hours
+- [ ] Check if block is already running, if it is running don't run again
