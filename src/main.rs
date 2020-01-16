@@ -2,12 +2,17 @@ use std::process::Command;
 use std::sync::mpsc::channel;
 use std::thread;
 use std::time::Duration;
-use users::get_current_uid;
 
 fn main() {
     let (send, recv) = channel();
 
-    let uid = get_current_uid();
+    let uid_ouput = Command::new("id")
+        .arg("-u")
+        .output()
+        .expect("Unable to get uid");
+
+    let uid = String::from_utf8_lossy(&uid_ouput.stdout);
+
     let _cmd = Command::new("sudo")
         .arg("-i")
         .output()
@@ -34,7 +39,7 @@ fn main() {
                 .arg("/Applications/SelfControl.app/Contents/MacOS/org.eyebeam.SelfControl")
                 .arg(uid.to_string())
                 .arg("--install")
-                .output();
+                .status();
 
             break;
         }
