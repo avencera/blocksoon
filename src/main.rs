@@ -6,7 +6,7 @@ fn main() {
     let (send, recv) = channel();
 
     let coundown_duration = 10;
-    let mut time = coundown_duration.clone();
+    let mut time = coundown_duration;
 
     // final
     thread::spawn(move || {
@@ -19,11 +19,11 @@ fn main() {
 
         let timer_ended = recv.try_recv().map(|_reply| println!("Done"));
 
-        if let Ok(_) = timer_ended {
+        if timer_ended.is_ok() {
             break;
         }
 
         thread::sleep(Duration::from_secs(1));
-        time = time - 1;
+        time -= 1
     }
 }
