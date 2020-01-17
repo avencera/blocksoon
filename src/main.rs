@@ -1,5 +1,6 @@
 use blocksoon::options::Options;
 use clap::{App, AppSettings, Arg};
+use notify_rust::Notification;
 use std::process::Command;
 use std::thread;
 use std::time::Duration;
@@ -60,6 +61,11 @@ fn main() {
 }
 
 fn start_self_control(uid: String) {
+    let _ = Notification::new()
+        .summary("BlockSoon")
+        .body("Starting SelfControl block now")
+        .show();
+
     Command::new("sudo")
         .arg("/Applications/SelfControl.app/Contents/MacOS/org.eyebeam.SelfControl")
         .arg(uid)
