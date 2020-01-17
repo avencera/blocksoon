@@ -2,7 +2,7 @@ use clap::ArgMatches;
 
 #[derive(Debug)]
 pub struct Options {
-    pub seconds: usize,
+    pub countdown: usize,
 }
 
 impl Options {
@@ -11,7 +11,7 @@ impl Options {
         let total_seconds = (hours * 60 * 60) + (minutes * 60) + seconds;
 
         Options {
-            seconds: total_seconds,
+            countdown: total_seconds,
         }
     }
 }

@@ -41,7 +41,7 @@ fn main() {
     enter_sudo();
 
     let (send, recv) = channel();
-    let coundown_duration = options.seconds as u64;
+    let coundown_duration = options.countdown as u64;
     let mut time = coundown_duration;
 
     // timer
