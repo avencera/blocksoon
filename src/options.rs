@@ -20,15 +20,15 @@ fn time_selector_tuple(matches: &ArgMatches) -> (usize, usize, usize) {
     (
         matches
             .value_of("hours")
-            .map(|v| v.parse().expect("Unable to parse"))
+            .map(|v| v.parse().expect("Unable to parse number of hours"))
             .unwrap_or(0),
         matches
             .value_of("minutes")
-            .map(|v| v.parse().expect("Unable to parse"))
+            .map(|v| v.parse().expect("Unable to parse number of minutes"))
             .unwrap_or(0),
         matches
             .value_of("seconds")
-            .map(|v| v.parse().expect("Unable to parse"))
+            .map(|v| v.parse().expect("Unable to parse number of seconds"))
             .unwrap_or(0),
     )
 }
