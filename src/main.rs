@@ -1,7 +1,6 @@
 use blocksoon::options::Options;
 use clap::{App, AppSettings, Arg};
 use std::process::Command;
-use std::sync::mpsc::channel;
 use std::thread;
 use std::time::Duration;
 
@@ -40,26 +39,21 @@ fn main() {
     let uid = get_uid();
     enter_sudo();
 
-    let (send, recv) = channel();
-    let coundown_duration = options.countdown as u64;
-    let mut time = coundown_duration;
-
-    // timer
-    thread::spawn(move || {
-        thread::sleep(Duration::from_secs(coundown_duration));
-        send.send(()).unwrap();
-    });
+    let mut time = options.countdown as u64;
 
     loop {
-        println!("Starting self control in: {}", time);
-
-        let timer_ended = recv.try_recv();
-        if timer_ended.is_ok() {
+        if time == 0 {
             println!("Starting block now...");
             start_self_control(uid);
             break;
         }
 
+        // refresh sudo timestamp every 60 seconds
+        if time % 60 == 0 {
+            enter_sudo();
+        }
+
+        println!("Starting self control in: {}", time);
         thread::sleep(Duration::from_secs(1));
         time -= 1
     }
@@ -72,6 +66,12 @@ fn start_self_control(uid: String) {
         .arg("--install")
         .output()
         .expect("Unable to start self control");
+
+    // clears sudo timestamp so that next sudo command will require password
+    Command::new("sudo")
+        .arg("-K")
+        .output()
+        .expect("Unable to remove sudo privileges");
 }
 
 fn get_uid() -> String {
@@ -84,8 +84,10 @@ fn get_uid() -> String {
 }
 
 fn enter_sudo() {
+    // refreshes sudo timestamp so we can still run SelfControl in sudo even
+    // after a long timer
     Command::new("sudo")
-        .arg("-i")
+        .arg("-v")
         .output()
         .expect("Unable to put user into sudo");
 }
