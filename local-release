@@ -1,0 +1,6 @@
+#!/bin/bash
+app_name=$(basename $(pwd));
+
+cargo build --release;  
+rm  /usr/local/bin/$app_name; 
+ln -s "$(pwd)/target/release/$app_name" /usr/local/bin
