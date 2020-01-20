@@ -1,9 +1,11 @@
+use crate::self_control::SelfControl;
 use clap::ArgMatches;
 use std::process;
 
 #[derive(Debug)]
 pub struct Options {
     pub countdown: usize,
+    pub self_control: Option<SelfControl>,
 }
 
 impl Options {
@@ -18,6 +20,7 @@ impl Options {
 
         Options {
             countdown: total_seconds,
+            self_control: SelfControl::new(),
         }
     }
 }

@@ -1,7 +1,5 @@
 use blocksoon::options::Options;
 use clap::{App, AppSettings, Arg};
-use notify_rust::Notification;
-use std::process::Command;
 use std::thread;
 use std::time::Duration;
 
@@ -36,64 +34,27 @@ fn main() {
         .get_matches();
 
     let options = Options::new_from_matches(&matches);
+    blocksoon::check_if_already_running(&options);
 
-    let uid = get_uid();
-    enter_sudo();
+    let uid = blocksoon::get_uid();
+    blocksoon::enter_sudo();
 
     let mut time = options.countdown as u64;
 
     loop {
         if time == 0 {
             println!("Starting block now...");
-            start_self_control(uid);
+            blocksoon::start_self_control(uid);
             break;
         }
 
         // refresh sudo timestamp every 60 seconds
         if time % 60 == 0 {
-            enter_sudo();
+            blocksoon::enter_sudo();
         }
 
         println!("Starting self control in: {}", time);
         thread::sleep(Duration::from_secs(1));
         time -= 1
     }
-}
-
-fn start_self_control(uid: String) {
-    let _ = Notification::new()
-        .summary("BlockSoon")
-        .body("Starting SelfControl block now")
-        .show();
-
-    Command::new("sudo")
-        .arg("/Applications/SelfControl.app/Contents/MacOS/org.eyebeam.SelfControl")
-        .arg(uid)
-        .arg("--install")
-        .output()
-        .expect("Unable to start self control");
-
-    // clears sudo timestamp so that next sudo command will require password
-    Command::new("sudo")
-        .arg("-K")
-        .output()
-        .expect("Unable to remove sudo privileges");
-}
-
-fn get_uid() -> String {
-    let uid_ouput = Command::new("id")
-        .arg("-u")
-        .output()
-        .expect("Unable to get uid");
-
-    String::from_utf8_lossy(&uid_ouput.stdout).to_string()
-}
-
-fn enter_sudo() {
-    // refreshes sudo timestamp so we can still run SelfControl in sudo even
-    // after a long timer
-    Command::new("sudo")
-        .arg("-v")
-        .output()
-        .expect("Unable to put user into sudo");
 }

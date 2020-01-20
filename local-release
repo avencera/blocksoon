@@ -1,5 +1,5 @@
 #!/bin/bash
-app_name=$(basename $(pwd));
+app_name=$(cargo pkgid | cut -d '#' -f 2 | cut -d ':' -f 1)
 
 cargo build --release;  
 rm  /usr/local/bin/$app_name; 
