@@ -9,18 +9,17 @@ use std::option::Option;
 pub struct SelfControl {
     pub block_duration: usize,
     pub block_started_date: DateTime<Utc>,
-    pub host_black_list: Vec<String>,
+    pub host_blacklist: Vec<String>,
 }
 
 impl SelfControl {
     pub fn new() -> Option<SelfControl> {
         let home_dir = dirs::home_dir()?;
-
         let file_path = format!(
-            "{}/Library/Preferences/org.eyebeam.SelfControl",
+            "{}/Library/Preferences/org.eyebeam.SelfControl.plist",
             home_dir.to_str()?
         );
 
-        plist::from_file(file_path).ok()
+        plist::from_file(&file_path).ok()
     }
 }
