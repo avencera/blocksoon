@@ -9,3 +9,7 @@ edition = "2018"
 [dependencies]
 clap ="2.33"
 notify-rust = "3"
+plist = "0.5"
+dirs = "2.0.2"
+serde = { version = "1.0", features = ["derive"] }
+chrono = { version = "0.4", features = ["serde"] }
