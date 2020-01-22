@@ -17,6 +17,7 @@ pub fn start_self_control(uid: String) {
     let _ = Notification::new()
         .summary("BlockSoon")
         .body("Starting SelfControl block now")
+        .sound_name("Glass")
         .show();
 
     Command::new("sudo")
@@ -51,6 +52,7 @@ pub fn check_if_already_running(options: &options::Options) -> () {
             let _ = Notification::new()
                 .summary("BlockSoon")
                 .body("SelfControl is already running")
+                .sound_name("Pop")
                 .show();
 
             println!("SelfControl is already running");
