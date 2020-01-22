@@ -43,16 +43,18 @@ pub fn get_uid() -> String {
 }
 
 pub fn check_if_already_running(options: &options::Options) -> () {
+    // SelfControl sets started_date to a very large year when its NOT started
+    // usually year 4000 or 4001
     match &options.self_control {
-        Some(self_control) if self_control.block_started_date.year() != 4000 => {
+        Some(self_control) if self_control.block_started_date.year() >= 3000 => (),
+        _ => {
             let _ = Notification::new()
                 .summary("BlockSoon")
                 .body("SelfControl is already running")
                 .show();
 
             println!("SelfControl is already running");
-            std::process::exit(1);
+            std::process::exit(1)
         }
-        _ => (),
     }
 }

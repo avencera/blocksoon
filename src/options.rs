@@ -4,7 +4,7 @@ use std::process;
 
 #[derive(Debug)]
 pub struct Options {
-    pub countdown: usize,
+    pub countdown: i32,
     pub self_control: Option<SelfControl>,
 }
 
@@ -25,7 +25,7 @@ impl Options {
     }
 }
 
-fn time_selector_tuple(matches: &ArgMatches) -> (usize, usize, usize) {
+fn time_selector_tuple(matches: &ArgMatches) -> (i32, i32, i32) {
     (
         matches
             .value_of("hours")

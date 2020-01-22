@@ -7,7 +7,7 @@ use std::option::Option;
 #[derive(Deserialize, Debug)]
 #[serde(rename_all = "PascalCase")]
 pub struct SelfControl {
-    pub block_duration: usize,
+    pub block_duration: f64,
     pub block_started_date: DateTime<Utc>,
     pub host_blacklist: Vec<String>,
 }
